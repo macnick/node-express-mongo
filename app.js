@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const morgan = require('morgan')
 const rateLimit = require('express-rate-limit')
@@ -10,8 +11,12 @@ const globalErrorHandler = require('./controllers/errorController')
 const tourRouter = require('./routes/tours')
 const userRouter = require('./routes/users')
 const reviewRouter = require('./routes/reviews')
+const viewRouter = require('./routes/viewRoutes')
 const app = express()
 
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(helmet())
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
@@ -38,12 +43,13 @@ app.use(
     ],
   })
 )
-app.use(express.static(`${__dirname}/public`))
+
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString()
   // console.log(req.protocol, req.get('host'), req.originalUrl)
   next()
 })
+app.use('/', viewRouter)
 app.use('/api', limiter)
 app.use('/api/v1/tours', tourRouter)
 app.use('/api/v1/users', userRouter)

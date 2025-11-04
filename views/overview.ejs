@@ -1,0 +1,6 @@
+<main class="main">
+  <div class="card-container">
+    <% tours.forEach((tour, i) => { %> <%- include('card', { tour, i }) %> <% })
+    %>
+  </div>
+</main>
