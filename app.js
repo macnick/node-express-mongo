@@ -17,7 +17,23 @@ const app = express()
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(helmet())
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", 'https://unpkg.com'],
+      styleSrc: ["'self'", 'https://unpkg.com', 'https://fonts.googleapis.com'],
+      fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+      imgSrc: [
+        "'self'",
+        'data:',
+        'https://unpkg.com',
+        'https://*.tile.openstreetmap.org',
+      ],
+      connectSrc: ["'self'"],
+    },
+  })
+)
 const limiter = rateLimit({
   windowMs: 60 * 60 * 1000,
   max: 60,

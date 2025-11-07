@@ -29,13 +29,16 @@
       <svg class="card__icon">
         <use xlink:href="img/icons.svg#icon-calendar"></use>
       </svg>
-      <span><January 2022></span>
+      <span
+        ><%= new Date(tour.startDates[0]).toLocaleString('en-us', {month:
+        'long', year: 'numeric'}) %></span
+      >
     </div>
     <div class="card__data">
       <svg class="card__icon">
         <use xlink:href="img/icons.svg#icon-flag"></use>
       </svg>
-      <span>2 stops</span>
+      <span><%= tour.locations.length %> stops</span>
     </div>
     <div class="card__data">
       <svg class="card__icon">
@@ -52,8 +55,12 @@
     </p>
     <p class="card__ratings">
       <span class="card__footer-value"><%= tour.ratingsAverage %></span>
-      <span class="card__footer-text">rating (<%= tour.ratingsQuantity %>)</span>
+      <span class="card__footer-text"
+        >rating (<%= tour.ratingsQuantity %>)</span
+      >
     </p>
-    <a href="#" class="btn btn--green btn--small">Details</a>
+    <a href="/tours/<%= tour.slug %>" class="btn btn--green btn--small"
+      >Details</a
+    >
   </div>
 </div>
