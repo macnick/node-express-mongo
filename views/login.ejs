@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css?family=Lato:300,300i,700"
       rel="stylesheet"
     />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <%- include('header') %>
@@ -39,11 +40,12 @@
             />
           </div>
           <div class="form__group">
-            <button class="btn btn--green">Login</button>
+            <button class="btn btn--green" type="submit">Login</button>
           </div>
         </form>
       </div>
     </main>
     <%- include('footer') %>
   </body>
+  <script src="/js/login.js"></script>
 </html>

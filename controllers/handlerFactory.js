@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync')
 const deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
     const doc = await Model.findByIdAndDelete(req.params.id)
-    console.log(doc)
+
     if (!doc) {
       return next(new AppError(`No ${Model.modelName} found with that ID`, 404))
     }

@@ -17,7 +17,7 @@ const createAndSendToken = (user, statusCode, res) => {
   if (process.env.NODE_ENV === 'development') {
     cookieOptions.secure = false
   }
-  res.cookie('myCookie', token, cookieOptions)
+  res.cookie('jwt', token, cookieOptions)
   res.status(statusCode).json({
     status: 'success',
     token,
@@ -66,6 +66,9 @@ const protect = catchAsync(async (req, res, next) => {
   // 1 check if token exists
   if (req.headers.authorization?.startsWith('Bearer')) {
     token = req.headers.authorization.split(' ')[1]
+  }
+  if (req.cookies.jwt) {
+    token = req.cookies.jwt
   }
   if (!token) {
     return next(
@@ -179,8 +182,32 @@ const updatePassword = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res)
 })
 
+const isLoggedIn = catchAsync(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    )
+
+    const currentUser = await User.findById(decoded.id)
+    if (!currentUser) {
+      return next(new AppError('This user does no longer exist.', 401))
+    }
+
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next()
+    }
+    // Make user data available in templates res.locals.variableName
+    res.locals.user = currentUser
+    return next()
+  }
+  res.locals.user = null
+  next()
+})
+
 module.exports = {
   login,
+  isLoggedIn,
   signup,
   protect,
   restrictTo,

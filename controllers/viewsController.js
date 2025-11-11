@@ -15,7 +15,7 @@ const getTour = catchAsync(async (req, res, next) => {
     path: 'reviews',
     select: 'review rating user',
   })
-  console.log(tour)
+
   res.status(200).render('tour', {
     title: tour.name,
     user: 'Nick',

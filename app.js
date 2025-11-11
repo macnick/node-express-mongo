@@ -6,6 +6,7 @@ const helmet = require('helmet')
 const mongoSanitize = require('express-mongo-sanitize')
 const xss = require('xss-clean')
 const hpp = require('hpp')
+const cookieParser = require('cookie-parser')
 const AppError = require('./utils/appError')
 const globalErrorHandler = require('./controllers/errorController')
 const tourRouter = require('./routes/tours')
@@ -21,7 +22,7 @@ app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", 'https://unpkg.com'],
+      scriptSrc: ["'self'", 'https://cdn.jsdelivr.net', 'https://unpkg.com'],
       styleSrc: ["'self'", 'https://unpkg.com', 'https://fonts.googleapis.com'],
       fontSrc: ["'self'", 'https://fonts.gstatic.com'],
       imgSrc: [
@@ -45,6 +46,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 app.use(express.json({ limit: '10kb' }))
+app.use(cookieParser())
 app.use(mongoSanitize())
 app.use(xss())
 app.use(
@@ -62,9 +64,10 @@ app.use(
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString()
-  // console.log(req.protocol, req.get('host'), req.originalUrl)
+  console.log(req.cookies)
   next()
 })
+
 app.use('/', viewRouter)
 app.use('/api', limiter)
 app.use('/api/v1/tours', tourRouter)
