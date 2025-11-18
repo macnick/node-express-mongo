@@ -3,21 +3,13 @@ const showAlert = (type, message) => {
   document.querySelector('body').insertAdjacentHTML('afterbegin', markup)
   window.setTimeout(() => {
     document.querySelector('.alert').remove()
-  }, 5000)
+  }, 4000)
 }
 
 const showErrorAlert = (message) => {
   showAlert('error', message)
-  window.setTimeout(() => {
-    document.querySelector('.alert').remove()
-  }, 5000)
 }
 
 const showSuccessAlert = (message) => {
   showAlert('success', message)
-  window.setTimeout(() => {
-    document.querySelector('.alert').remove()
-  }, 5000)
 }
-
-export { showErrorAlert, showSuccessAlert }
