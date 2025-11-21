@@ -11,6 +11,7 @@ const {
 } = require('../controllers/userController')
 const {
   login,
+  logout,
   signup,
   protect,
   forgotPassword,
@@ -23,10 +24,12 @@ const router = express.Router()
 
 router.post('/signup', signup)
 router.post('/login', login)
+router.get('/logout', logout)
 router.post('/forgotPassword', forgotPassword)
 router.patch('/resetPassword/:token', resetPassword)
 
 router.use(protect) // this will protect all routes after this middleware
+
 router.patch('/updateMyPassword', updatePassword)
 router.get('/me', getMe, getUser) // there is a reason for placing this before the :id route
 router.patch('/updateMe', updateMe)

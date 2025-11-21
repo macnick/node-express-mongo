@@ -61,6 +61,13 @@ const login = catchAsync(async (req, res, next) => {
   createAndSendToken(user, 200, res)
 })
 
+const logout = (req, res) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+  })
+  res.status(200).json({ status: 'success' })
+}
+
 const protect = catchAsync(async (req, res, next) => {
   let token
   // 1 check if token exists
@@ -148,7 +155,6 @@ const forgotPassword = catchAsync(async (req, res, next) => {
 })
 
 const resetPassword = catchAsync(async (req, res, next) => {
-  // Get user based on the token
   const hashedToken = crypto
     .createHash('sha256')
     .update(req.params.token)
@@ -185,22 +191,27 @@ const updatePassword = catchAsync(async (req, res, next) => {
 
 const isLoggedIn = catchAsync(async (req, res, next) => {
   if (req.cookies.jwt) {
-    const decoded = await promisify(jwt.verify)(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    )
+    try {
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      )
 
-    const currentUser = await User.findById(decoded.id)
-    if (!currentUser) {
-      return next(new AppError('This user does no longer exist.', 401))
-    }
+      const currentUser = await User.findById(decoded.id)
+      if (!currentUser) {
+        return next(new AppError('This user does no longer exist.', 401))
+      }
 
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next()
+      }
+      // Make user data available in templates res.locals.variableName
+      res.locals.user = currentUser
+      return next()
+    } catch (err) {
+      res.locals.user = null
       return next()
     }
-    // Make user data available in templates res.locals.variableName
-    res.locals.user = currentUser
-    return next()
   }
   res.locals.user = null
   next()
@@ -208,6 +219,7 @@ const isLoggedIn = catchAsync(async (req, res, next) => {
 
 module.exports = {
   login,
+  logout,
   isLoggedIn,
   signup,
   protect,

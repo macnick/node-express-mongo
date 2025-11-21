@@ -3,6 +3,7 @@ const {
   getOverview,
   getTour,
   login,
+  logout,
 } = require('../controllers/viewsController')
 const { isLoggedIn } = require('../controllers/authController')
 

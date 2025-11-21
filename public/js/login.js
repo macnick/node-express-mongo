@@ -28,7 +28,23 @@ if (loginForm) {
     const email = document.getElementById('email').value
     const password = document.getElementById('password').value
 
-    console.log(`Email: ${email}, Password: ${password}`)
     login(email, password)
   })
+}
+
+const logout = async () => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: 'api/v1/users/logout',
+    })
+    if ((res.status = 200)) location.reload(true)
+  } catch (err) {
+    showAlert('error', 'Error logging out! Try again.')
+  }
+}
+
+const logoutButton = document.getElementById('logout')
+if (logoutButton) {
+  logoutButton.addEventListener('click', logout)
 }

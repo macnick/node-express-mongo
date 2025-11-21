@@ -15,10 +15,10 @@
   </div>
   <nav class="nav nav--user">
     <% if (user) { name = user.name?.split(' ')[0]; %>
-    <a href="#" class="nav__el">Log out</a>
+    <button class="nav__el" id="logout">Log out</button>
     <a href="#" class="nav__el">
       <img
-        src="img/users/<%= user.photo %>"
+        src="/img/users/<%= user.photo %>"
         alt="User photo"
         class="nav__user-img"
       />
