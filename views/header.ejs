@@ -1,6 +1,6 @@
 <header class="header">
   <nav class="nav nav--tours">
-    <a href="/" class="nav__el">All tours</a>
+    <a href="/" class="nav__el">All tours!</a>
     <form class="nav__search">
       <button class="nav__search-btn">
         <svg>
@@ -16,7 +16,7 @@
   <nav class="nav nav--user">
     <% if (user) { name = user.name?.split(' ')[0]; %>
     <button class="nav__el" id="logout">Log out</button>
-    <a href="#" class="nav__el">
+    <a href="/account" class="nav__el">
       <img
         src="/img/users/<%= user.photo %>"
         alt="User photo"

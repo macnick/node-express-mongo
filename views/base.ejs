@@ -15,7 +15,8 @@
   <body>
     <%- include('header') %>
     <!-- Overview content -->
-    <%- include('overview') %>
+    <% if (error) { %> <%- include('error', { msg: error }) %> <% } else { %>
+    <%- include('overview') %> <% } %>
     <!-- footer -->
     <%- include('footer') %>
   </body>

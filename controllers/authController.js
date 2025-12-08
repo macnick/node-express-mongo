@@ -217,12 +217,29 @@ const isLoggedIn = catchAsync(async (req, res, next) => {
   next()
 })
 
+const account = (req, res) => {
+  res.status(200).render('account', {
+    title: 'Your account',
+    user: res.locals.user,
+  })
+  next()
+}
+
+redirectIfNotLoggedIn = (req, res, next) => {
+  if (!res.locals?.user) {
+    return res.redirect('/login')
+  }
+  next()
+}
+
 module.exports = {
+  account,
   login,
   logout,
   isLoggedIn,
   signup,
   protect,
+  redirectIfNotLoggedIn,
   restrictTo,
   forgotPassword,
   resetPassword,
