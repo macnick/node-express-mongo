@@ -56,11 +56,12 @@
         <div class="user-view__content">
           <div class="user-view__form-container">
             <h2 class="heading-secondary ma-bt-md">Your account settings</h2>
-            <form class="form form-user-data">
+            <form class="form form-user-data" action="/submit-user-data" method="POST">
               <div class="form__group">
                 <label class="form__label" for="name">Name</label>
                 <input
                   id="name"
+                  name="name"
                   class="form__input"
                   type="text"
                   value="<%= user.name %>"
@@ -71,6 +72,7 @@
                 <label class="form__label" for="email">Email address</label>
                 <input
                   id="email"
+                  name="email"
                   class="form__input"
                   type="email"
                   value="<%= user.email %>"
